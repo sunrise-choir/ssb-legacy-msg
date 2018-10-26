@@ -71,7 +71,7 @@ pub fn to_legacy<W, T>(msg: &Message<T>, w: &mut W, compact: bool) -> Result<(),
     }
 
     entry("signature", w, compact)?;
-    msg.author.sig_to_legacy(&msg.signature, w)?;
+    msg.signature.to_legacy(w)?;
 
     w.write_all(b"\n}")?;
     Ok(())
@@ -81,18 +81,22 @@ pub fn to_legacy<W, T>(msg: &Message<T>, w: &mut W, compact: bool) -> Result<(),
 /// [legacy encoding](https://spec.scuttlebutt.nz/messages.html#legacy-json-encoding).
 ///
 /// If `compact`, this omits all whitespace. Else, this produces the signing encoding.
-pub fn to_legacy_vec<T: Serialize>(msg: &Message<T>, compact: bool) -> Vec<u8> {
+pub fn to_legacy_vec<T: Serialize>(msg: &Message<T>,
+                                   compact: bool)
+                                   -> Result<Vec<u8>, EncodeJsonError> {
     let mut out = Vec::with_capacity(256);
-    to_legacy(msg, &mut out, compact).unwrap();
-    out
+    to_legacy(msg, &mut out, compact)?;
+    Ok(out)
 }
 
 /// Serialize a `Message` into an owned string, using the
 /// [legacy encoding](https://spec.scuttlebutt.nz/messages.html#legacy-json-encoding).
 ///
 /// If `compact`, this omits all whitespace. Else, this produces the signing encoding.
-pub fn to_legacy_string<T: Serialize>(msg: &Message<T>, compact: bool) -> String {
-    unsafe { String::from_utf8_unchecked(to_legacy_vec(msg, compact)) }
+pub fn to_legacy_string<T: Serialize>(msg: &Message<T>,
+                                      compact: bool)
+                                      -> Result<String, EncodeJsonError> {
+    Ok(unsafe { String::from_utf8_unchecked(to_legacy_vec(msg, compact)?) })
 }
 
 fn ws<W: Write>(w: &mut W, compact: bool) -> Result<(), io::Error> {

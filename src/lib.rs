@@ -6,11 +6,12 @@ extern crate ssb_multiformats;
 use ssb_legacy_msg_data::LegacyF64;
 use ssb_multiformats::{
     multihash::Multihash,
-    multikey::Multikey,
+    multikey::{Multikey, Multisig},
     multibox::Multibox,
 };
 
 pub mod json;
+pub mod verify;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Content<T> {
@@ -29,5 +30,5 @@ pub struct Message<T> {
     pub timestamp: LegacyF64,
     pub content: Content<T>,
     pub swapped: bool,
-    pub signature: Vec<u8>
+    pub signature: Multisig,
 }

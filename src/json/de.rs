@@ -177,7 +177,7 @@ pub fn from_legacy<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), 
         }
     }
 
-    let signature: Vec<u8>;
+    let signature;
     dec.entry("signature", DecodeJsonError::ExpectedSignature)?;
 
     let (tmp_sig, tail) = author.sig_from_legacy(dec.input)?;
