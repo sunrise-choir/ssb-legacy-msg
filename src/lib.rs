@@ -1,3 +1,4 @@
+extern crate crypto_hash;
 extern crate serde;
 extern crate strtod;
 extern crate ssb_legacy_msg_data;

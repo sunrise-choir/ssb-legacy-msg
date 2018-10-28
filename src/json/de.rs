@@ -111,7 +111,7 @@ pub fn from_legacy<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), 
             // `a`
             dec.expect_bytes(b"author\"", DecodeJsonError::ExpectedAuthor)?;
             dec.expect_ws(0x3A, DecodeJsonError::Syntax)?; // `:`
-            let _ = dec.peek_ws()?;
+            dec.expect_ws(0x22, DecodeJsonError::Syntax)?;
             let (tmp, tail) = Multikey::from_legacy(dec.input)?;
             dec.input = tail;
             author = tmp;
@@ -141,6 +141,7 @@ pub fn from_legacy<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), 
             }
 
             dec.entry("author", DecodeJsonError::ExpectedAuthor)?;
+            dec.expect(0x22, DecodeJsonError::Syntax)?;
             let (tmp, tail) = Multikey::from_legacy(dec.input)?;
             dec.input = tail;
             author = tmp;
@@ -179,7 +180,7 @@ pub fn from_legacy<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), 
 
     let signature;
     dec.entry("signature", DecodeJsonError::ExpectedSignature)?;
-
+    dec.expect(0x22, DecodeJsonError::Syntax)?;
     let (tmp_sig, tail) = author.sig_from_legacy(dec.input)?;
     dec.input = tail;
     signature = tmp_sig;
@@ -234,7 +235,7 @@ impl<'de> MsgJsonDes<'de> {
         }
     }
 
-    // Consumes the expected byt, gives the given error if it is something else
+    // Consumes the expected byte, gives the given error if it is something else
     fn expect(&mut self, expected: u8, err: DecodeJsonError) -> Result<(), DecodeJsonError> {
         if self.next()? == expected {
             Ok(())

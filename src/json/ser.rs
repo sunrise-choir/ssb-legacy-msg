@@ -40,7 +40,11 @@ pub fn to_legacy<W, T>(msg: &Message<T>, w: &mut W, compact: bool) -> Result<(),
     write_key("previous", w, compact)?;
     match msg.previous {
         None => w.write_all(b"null")?,
-        Some(ref mh) => mh.to_legacy(w)?,
+        Some(ref mh) => {
+            quote(w)?;
+            mh.to_legacy(w)?;
+            quote(w)?;
+        }
     }
     end_entry(w, compact)?;
 
@@ -49,10 +53,14 @@ pub fn to_legacy<W, T>(msg: &Message<T>, w: &mut W, compact: bool) -> Result<(),
         json::to_writer(w, &msg.sequence, compact)?;
 
         entry("author", w, compact)?;
+        quote(w)?;
         msg.author.to_legacy(w)?;
+        quote(w)?;
     } else {
         write_key("author", w, compact)?;
+        quote(w)?;
         msg.author.to_legacy(w)?;
+        quote(w)?;
 
         entry("sequence", w, compact)?;
         json::to_writer(w, &msg.sequence, compact)?;
@@ -66,12 +74,18 @@ pub fn to_legacy<W, T>(msg: &Message<T>, w: &mut W, compact: bool) -> Result<(),
 
     entry("content", w, compact)?;
     match msg.content {
-        Content::Encrypted(ref mb) => mb.to_legacy(w)?,
-        Content::Plain(ref t) => json::to_writer(w, t, compact)?,
+        Content::Encrypted(ref mb) => {
+            quote(w)?;
+            mb.to_legacy(w)?;
+            quote(w)?;
+        }
+        Content::Plain(ref t) => json::to_writer_indent(w, t, compact, 1)?,
     }
 
     entry("signature", w, compact)?;
+    quote(w)?;
     msg.signature.to_legacy(w)?;
+    quote(w)?;
 
     w.write_all(b"\n}")?;
     Ok(())
@@ -124,4 +138,8 @@ fn end_entry<W: Write>(w: &mut W, compact: bool) -> Result<(), io::Error> {
 fn entry<W: Write>(key: &str, w: &mut W, compact: bool) -> Result<(), io::Error> {
     end_entry(w, compact)?;
     write_key(key, w, compact)
+}
+
+fn quote<W: Write>(w: &mut W) -> Result<(), io::Error> {
+    w.write_all(b"\"")
 }
