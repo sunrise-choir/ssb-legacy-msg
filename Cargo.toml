@@ -6,8 +6,8 @@ edition = "2018"
 license = "AGPL-3.0"
 
 [dependencies]
-ssb-legacy-msg-data = { path = "../legacy-msg-data" }
-ssb-multiformats = { path = "../ssb-multiformats" }
+ssb-legacy-msg-data = { git = "https://github.com/ssbrs/legacy-msg-data" }
+ssb-multiformats = { git = "https://github.com/ssbrs/ssb-multiformats" }
 serde = "1.0.80"
 strtod = { git = "https://github.com/ssbrs/strtod" }
 crypto-hash = "0.3.1"
