@@ -11,3 +11,5 @@ ssb-multiformats = { git = "https://github.com/ssbrs/ssb-multiformats" }
 serde = "1.0.80"
 strtod = { git = "https://github.com/ssbrs/strtod" }
 crypto-hash = "0.3.1"
+varu64 = "0.6.1"
+ctlv = { git = "https://github.com/AljoschaMeyer/ctlv" }
