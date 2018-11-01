@@ -27,3 +27,7 @@ path = "fuzz_targets/roundtrip_compact.rs"
 [[bin]]
 name = "roundtrip_signing"
 path = "fuzz_targets/roundtrip_signing.rs"
+
+[[bin]]
+name = "roundtrip_clmr"
+path = "fuzz_targets/roundtrip_clmr.rs"
