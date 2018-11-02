@@ -66,12 +66,12 @@ pub fn from_clmr<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), De
 {
     let mut dec = ClmrDes::from_slice(input);
 
-    let first: bool;
+    let not_first: bool;
     let swapped: bool;
     let encrypted: bool;
 
     let flags = dec.next()?;
-    first = flags & 0b0000_0100 != 0;
+    not_first = flags & 0b0000_0100 != 0;
     swapped = flags & 0b0000_0010 != 0;
     encrypted = flags & 0b0000_0001 != 0;
 
@@ -80,10 +80,10 @@ pub fn from_clmr<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), De
     let timestamp = dec.timestamp()?;
 
     let previous: Option<Multihash>;
-    if first {
-        previous = None;
-    } else {
+    if not_first {
         previous = Some(dec.message_hash()?);
+    } else {
+        previous = None;
     }
 
     let content: Content<T>;

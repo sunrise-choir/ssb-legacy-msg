@@ -45,21 +45,36 @@ pub fn to_clmr<W, T>(msg: &Message<T>, w: &mut W) -> Result<(), EncodeClmrError>
     }
 
     w.write_all(&[flags])?;
+    // println!("flags: {:x?}", flags);
 
     msg.author.to_compact(&mut *w)?;
+    // println!("author: {:x?}", msg.author.to_compact_vec());
 
     varu64::encode_write(msg.sequence, &mut *w)?;
+    // println!("sequence: {:x?}", msg.sequence);
+
+    let timestamp: [u8; 8] =
+        unsafe { std::mem::transmute(u64::to_be(f64::to_bits(msg.timestamp.into()))) };
+    w.write_all(&timestamp)?;
 
     if let Some(ref mh) = msg.previous {
         let _ = mh.to_compact(&mut *w)?;
+        // println!("previous: {:x?}", mh.to_compact_vec());
     }
 
     match msg.content {
-        Content::Encrypted(ref mb) => mb.to_compact(w)?,
-        Content::Plain(ref t) => cbor::to_writer(&mut *w, t)?,
+        Content::Encrypted(ref mb) => {
+            mb.to_compact(w)?;
+            // println!("encrypted: {:x?}", mb.to_compact_vec());
+        }
+        Content::Plain(ref t) => {
+            cbor::to_writer(&mut *w, t)?;
+            // println!("content: {:x?}", cbor::to_vec(t));
+        }
     }
 
     msg.signature.to_compact(w)?;
+    // println!("signature: {:x?}", msg.signature.to_compact_vec());
 
     Ok(())
 }
