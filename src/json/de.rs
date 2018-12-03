@@ -167,8 +167,9 @@ pub fn from_legacy<'de, T>(input: &'de [u8]) -> Result<(Message<T>, &'de [u8]), 
             // `"`
             dec.advance(1);
             let (tmp, tail) = Multibox::from_legacy(dec.input)?;
-            dec.input = tail; // already handled the terminating `"`
+            dec.input = tail;
             content = Content::Encrypted(tmp);
+            dec.expect(0x22, DecodeJsonError::Syntax)?; // `"`
         }
 
         _ => {
