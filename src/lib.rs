@@ -3,8 +3,6 @@ extern crate serde;
 extern crate strtod;
 extern crate ssb_legacy_msg_data;
 extern crate ssb_multiformats;
-extern crate varu64;
-extern crate ctlv;
 
 use ssb_legacy_msg_data::LegacyF64;
 use ssb_multiformats::{
@@ -14,7 +12,6 @@ use ssb_multiformats::{
 };
 
 pub mod json;
-pub mod clmr;
 pub mod verify;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
