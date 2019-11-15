@@ -83,10 +83,12 @@ where
         Content::Plain(ref t) => json::to_writer_indent(w, t, compact, 1)?,
     }
 
-    entry("signature", w, compact)?;
-    quote(w)?;
-    msg.signature.to_legacy(w)?;
-    quote(w)?;
+    if msg.signature.is_some() {
+        entry("signature", w, compact)?;
+        quote(w)?;
+        msg.signature.as_ref().unwrap().to_legacy(w)?;
+        quote(w)?;
+    }
 
     w.write_all(b"\n}")?;
     Ok(())

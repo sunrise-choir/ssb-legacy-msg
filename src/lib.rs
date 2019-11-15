@@ -31,7 +31,7 @@ pub struct Message<T> {
     pub timestamp: LegacyF64,
     pub content: Content<T>,
     pub swapped: bool,
-    pub signature: Multisig,
+    pub signature: Option<Multisig>,
 }
 
 impl<T> Message<T> {

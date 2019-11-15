@@ -211,7 +211,7 @@ where
             timestamp,
             content,
             swapped,
-            signature,
+            signature: Some(signature),
         },
         dec.rest(),
     ))
