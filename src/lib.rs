@@ -76,7 +76,7 @@ mod tests {
 
     #[derive(Serialize, Deserialize, Debug)]
     #[serde(tag = "type")] //
-    pub enum MessageContent {
+    enum MessageContent {
         #[serde(rename = "post")]
         Post(Post),
     }
