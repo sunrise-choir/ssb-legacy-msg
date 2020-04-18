@@ -1,8 +1,8 @@
 extern crate crypto_hash;
+extern crate lexical_core;
 extern crate serde;
 extern crate ssb_legacy_msg_data;
 extern crate ssb_multiformats;
-extern crate strtod;
 
 use ssb_legacy_msg_data::LegacyF64;
 use ssb_multiformats::{

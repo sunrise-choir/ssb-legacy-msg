@@ -1,6 +1,5 @@
 use serde::de::DeserializeOwned;
 use std::slice::SliceIndex;
-use strtod::strtod;
 
 use ssb_legacy_msg_data::json;
 use ssb_legacy_msg_data::LegacyF64;
@@ -422,8 +421,7 @@ impl<'de> MsgJsonDes<'de> {
         }
 
         // done parsing the number, convert it to a rust value
-        let f = strtod(unsafe { std::str::from_utf8_unchecked(self.slice(start..self.position)) })
-            .unwrap(); // We already checked that the input is a valid number
+        let f: f64 = lexical_core::parse(self.slice(start..self.position)).unwrap(); // We already checked that the input is a valid number
 
         if LegacyF64::is_valid(f) {
             Ok(f)
