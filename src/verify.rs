@@ -5,7 +5,7 @@ use std::io::Write;
 
 use crypto_hash::{Algorithm, Hasher};
 
-use ssb_legacy_msg_data::{legacy_length, to_weird_encoding};
+use ssb_json_msg_data::{legacy_length, to_weird_encoding};
 use ssb_multiformats::{
     multihash::{Multihash, Target},
     multikey::{Multikey, Multisig},

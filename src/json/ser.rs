@@ -1,7 +1,7 @@
 use std::io::{self, Write};
 
 use serde::Serialize;
-use ssb_legacy_msg_data::json;
+use ssb_json_msg_data::json;
 
 use super::super::{Content, Message};
 

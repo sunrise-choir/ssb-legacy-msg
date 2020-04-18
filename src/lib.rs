@@ -1,10 +1,10 @@
 extern crate crypto_hash;
 extern crate lexical_core;
 extern crate serde;
-extern crate ssb_legacy_msg_data;
+extern crate ssb_json_msg_data;
 extern crate ssb_multiformats;
 
-use ssb_legacy_msg_data::LegacyF64;
+use ssb_json_msg_data::LegacyF64;
 use ssb_multiformats::{
     multibox::Multibox,
     multihash::Multihash,
@@ -48,7 +48,7 @@ impl<T> Message<T> {
 mod tests {
     use super::*;
     use serde::{Deserialize, Serialize};
-    use ssb_legacy_msg_data::value::Value;
+    use ssb_json_msg_data::value::Value;
     use std::fs::read_to_string;
 
     #[test]

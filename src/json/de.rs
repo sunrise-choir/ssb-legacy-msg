@@ -1,8 +1,8 @@
 use serde::de::DeserializeOwned;
 use std::slice::SliceIndex;
 
-use ssb_legacy_msg_data::json;
-use ssb_legacy_msg_data::LegacyF64;
+use ssb_json_msg_data::json;
+use ssb_json_msg_data::LegacyF64;
 use ssb_multiformats::{
     multibox::{self, Multibox},
     multihash::{self, Multihash},
